@@ -1,0 +1,64 @@
+<div class="row align-items-center py-5">
+  <div class="col-md-6">
+    <h1 class="display-5 fw-bold mb-3">Job search without guesswork</h1>
+    <p class="lead text-muted mb-4">
+      Most job seekers apply blindly. A quick AI fit check turns a generic application
+      into a strategically calibrated one.
+    </p>
+
+    <div class="mb-5">
+      <div class="d-flex gap-3 mb-3">
+        <div class="text-primary fw-bold fs-4">1</div>
+        <div>
+          <div class="fw-semibold">Fill in your background</div>
+          <div class="text-muted small">Your current role, target role, top skills, and biggest challenge — takes two minutes.</div>
+        </div>
+      </div>
+      <div class="d-flex gap-3 mb-3">
+        <div class="text-primary fw-bold fs-4">2</div>
+        <div>
+          <div class="fw-semibold">Paste a job description</div>
+          <div class="text-muted small">Copy the full job posting from any job board and paste it into the form.</div>
+        </div>
+      </div>
+      <div class="d-flex gap-3 mb-3">
+        <div class="text-primary fw-bold fs-4">3</div>
+        <div>
+          <div class="fw-semibold">Get a fit score plus actionable advice</div>
+          <div class="text-muted small">A personalized fit score, three strengths to lead with, two gaps to address, a tailored resume headline, and a networking outreach draft — all specific to that role.</div>
+        </div>
+      </div>
+    </div>
+
+    <% if signed_in? %>
+      <%= link_to "Go to dashboard", dashboard_path, class: "btn btn-primary btn-lg" %>
+    <% else %>
+      <%= link_to "Get started", sign_up_path, class: "btn btn-primary btn-lg me-2" %>
+      <%= link_to "Sign in", sign_in_path, class: "btn btn-outline-secondary btn-lg" %>
+    <% end %>
+  </div>
+
+  <div class="col-md-6 mt-4 mt-md-0">
+    <div class="card border-secondary">
+      <div class="card-body p-4">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <div class="fit-score-circle" style="background-color: #84cc16; color: #1a2e05;">72</div>
+          <div>
+            <div class="fw-semibold">Director of Product Marketing</div>
+            <div class="text-muted small">Acme Cloud</div>
+          </div>
+        </div>
+        <p class="text-muted small mb-3">
+          Strong GTM and analyst relations background directly maps to this role's core requirements.
+          The gap is P&L ownership — quantify your indirect revenue impact to address it proactively.
+        </p>
+        <div class="d-flex gap-2 flex-wrap">
+          <span class="badge bg-success bg-opacity-25 text-success">GTM strategy</span>
+          <span class="badge bg-success bg-opacity-25 text-success">Analyst relations</span>
+          <span class="badge bg-warning bg-opacity-25 text-warning">P&L ownership gap</span>
+        </div>
+        <p class="text-muted small mt-3 mb-0 fst-italic">Sample advisor report</p>
+      </div>
+    </div>
+  </div>
+</div>

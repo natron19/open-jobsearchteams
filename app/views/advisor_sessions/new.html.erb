@@ -1,0 +1,67 @@
+<% if local_assigns[:gemini_error] %>
+  <%= render "shared/ai_error", error_type: gemini_error %>
+<% end %>
+
+<%# Profile context strip %>
+<div class="text-muted small mb-3">
+  Analyzing as: <strong><%= @profile.current_role %></strong> → targeting <strong><%= @profile.target_role %></strong>
+  &nbsp;·&nbsp; <%= link_to "Edit profile", edit_profile_path, class: "text-muted" %>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h1 class="mb-4">Analyze a job</h1>
+
+    <div class="card" data-controller="analyzing">
+      <div class="card-body p-4">
+        <div data-analyzing-target="form">
+          <%= form_with model: @session, url: advisor_sessions_path,
+                        data: { action: "submit->analyzing#submit" } do |f| %>
+            <% if @session.errors.any? %>
+              <div class="alert alert-danger">
+                <ul class="mb-0">
+                  <% @session.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <div class="mb-3">
+              <%= f.label :job_title, "Job title", class: "form-label" %>
+              <%= f.text_field :job_title, class: "form-control", placeholder: "e.g., Senior Product Manager" %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :company_name, "Company name", class: "form-label" %>
+              <%= f.text_field :company_name, class: "form-control", placeholder: "e.g., Acme Cloud" %>
+            </div>
+
+            <div class="mb-4"
+                 data-controller="character-counter"
+                 data-character-counter-max-value="8000">
+              <%= f.label :job_description, "Job description", class: "form-label" %>
+              <%= f.text_area :job_description,
+                  class: "form-control",
+                  rows: 14,
+                  placeholder: "Paste the full job description here",
+                  data: { character_counter_target: "input", action: "input->character-counter#update" } %>
+              <div class="text-muted small mt-1" data-character-counter-target="counter"></div>
+            </div>
+
+            <%= f.submit "Analyze this job", class: "btn btn-primary btn-lg" %>
+          <% end %>
+        </div>
+
+        <div class="d-none text-center py-5" data-analyzing-target="overlay">
+          <div class="spinner-border mb-3" role="status" style="width: 3rem; height: 3rem; color: var(--accent);">
+            <span class="visually-hidden">Analyzing...</span>
+          </div>
+          <p class="mb-1 fw-semibold">Analyzing your fit for this role&hellip;</p>
+          <p class="text-muted small mb-4">This usually takes 5–15 seconds.</p>
+          <%= link_to "Cancel", advisor_sessions_path, class: "btn btn-outline-secondary btn-sm" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<% report = session.advisor_report %>
+<% if report
+     if report.fit_score >= 80
+       badge_style = "background-color: #84cc16; color: #1a2e05;"
+     elsif report.fit_score >= 60
+       badge_style = nil
+       badge_class = "bg-warning text-dark"
+     else
+       badge_style = nil
+       badge_class = "bg-secondary"
+     end
+   end %>
+
+<div class="card h-100">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start mb-2">
+      <div>
+        <h6 class="card-title mb-0"><%= session.job_title %></h6>
+        <div class="text-muted small"><%= session.company_name %></div>
+      </div>
+      <% if report %>
+        <% if badge_style %>
+          <span class="badge rounded-pill fw-bold" style="<%= badge_style %>">
+            <%= report.fit_score %>
+          </span>
+        <% else %>
+          <span class="badge rounded-pill fw-bold <%= badge_class %>">
+            <%= report.fit_score %>
+          </span>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="text-muted small mb-3"><%= time_ago_in_words(session.created_at) %> ago</div>
+    <%= link_to "View report →", advisor_session_path(session), class: "btn btn-sm btn-outline-secondary" %>
+  </div>
+</div>

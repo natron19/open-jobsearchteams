@@ -1,0 +1,59 @@
+<div class="row g-4">
+  <%# Left panel — profile summary %>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span class="fw-semibold">My Profile</span>
+        <% if @profile %>
+          <%= link_to "Edit", edit_profile_path, class: "btn btn-sm btn-outline-secondary" %>
+        <% end %>
+      </div>
+      <div class="card-body">
+        <% if @profile %>
+          <dl class="mb-0">
+            <dt class="text-muted small">Current role</dt>
+            <dd class="mb-3"><%= @profile.current_role %></dd>
+
+            <dt class="text-muted small">Target role</dt>
+            <dd class="mb-3"><%= @profile.target_role %></dd>
+
+            <dt class="text-muted small">Top skills</dt>
+            <dd class="mb-3"><%= @profile.top_skills %></dd>
+
+            <dt class="text-muted small">Biggest challenge</dt>
+            <dd class="mb-0"><%= @profile.biggest_challenge %></dd>
+          </dl>
+        <% else %>
+          <p class="text-muted mb-3">Set up your profile so the AI advisor can personalize every analysis.</p>
+          <%= link_to "Set up profile", new_profile_path, class: "btn btn-primary btn-sm" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <%# Right panel — session list %>
+  <div class="col-md-8">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="mb-0">Recent Sessions</h5>
+      <%= link_to "Analyze a new job", new_advisor_session_path, class: "btn btn-primary btn-sm" %>
+    </div>
+
+    <% if @sessions.any? %>
+      <div class="row g-3">
+        <% @sessions.each do |session| %>
+          <div class="col-12">
+            <%= render "advisor_sessions/session_card", session: session %>
+          </div>
+        <% end %>
+      </div>
+      <%= link_to "View all sessions →", advisor_sessions_path, class: "d-block mt-3 text-muted small" %>
+    <% else %>
+      <div class="card border-secondary">
+        <div class="card-body text-center py-5">
+          <p class="text-muted mb-3">No sessions yet. Analyze your first job to get started.</p>
+          <%= link_to "Run your first analysis", new_advisor_session_path, class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

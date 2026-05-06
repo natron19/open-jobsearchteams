@@ -1,0 +1,21 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="mb-0">My Sessions</h1>
+  <%= link_to "Analyze a new job", new_advisor_session_path, class: "btn btn-primary" %>
+</div>
+
+<% if @sessions.any? %>
+  <div class="row g-3">
+    <% @sessions.each do |session| %>
+      <div class="col-md-6 col-lg-4">
+        <%= render "session_card", session: session %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="card border-secondary">
+    <div class="card-body text-center py-5">
+      <p class="text-muted mb-3">No sessions yet. Analyze your first job description to get started.</p>
+      <%= link_to "Run your first analysis", new_advisor_session_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,123 @@
+<% report = @session.advisor_report %>
+
+<%# Header %>
+<div class="d-flex justify-content-between align-items-start mb-4">
+  <div>
+    <h1 class="mb-1"><%= @session.job_title %></h1>
+    <div class="text-muted"><%= @session.company_name %> &nbsp;·&nbsp; <%= time_ago_in_words(@session.created_at) %> ago</div>
+  </div>
+  <%= link_to "Analyze another job", new_advisor_session_path, class: "btn btn-outline-secondary btn-sm" %>
+</div>
+
+<% if report %>
+  <%# AI disclaimer %>
+  <div class="alert alert-secondary small mb-4" role="alert">
+    This analysis is AI-generated based on the text you provided. It reflects pattern matching against your profile
+    and the job description — not a recruiter's judgment or inside knowledge of the company's hiring criteria.
+    Use it as one input among many.
+  </div>
+
+  <%# Fit score hero %>
+  <% if report.fit_score >= 80
+       score_bg    = "#84cc16"
+       score_color = "#1a2e05"
+     elsif report.fit_score >= 60
+       score_bg    = "var(--bs-warning)"
+       score_color = "#1a1a1a"
+     else
+       score_bg    = "var(--bs-secondary)"
+       score_color = "#fff"
+     end %>
+
+  <div class="text-center mb-5">
+    <div class="fit-score-circle mx-auto mb-3"
+         style="background-color: <%= score_bg %>; color: <%= score_color %>;">
+      <%= report.fit_score %>
+    </div>
+    <p class="text-muted"><%= report.rationale %></p>
+  </div>
+
+  <%# Three-column row: Strengths / Gaps / Next Steps %>
+  <div class="row g-4 mb-4">
+    <div class="col-md-4">
+      <div class="card h-100 border-start border-3 border-lime">
+        <div class="card-body">
+          <h6 class="card-title text-lime">Strengths</h6>
+          <ul class="mb-0 ps-3">
+            <% JSON.parse(report.strengths || "[]").each do |strength| %>
+              <li class="mb-2 small"><%= strength %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100 border-start border-3 border-warning">
+        <div class="card-body">
+          <h6 class="card-title text-warning">Gaps</h6>
+          <ul class="mb-0 ps-3">
+            <% JSON.parse(report.gaps || "[]").each do |gap| %>
+              <li class="mb-2 small"><%= gap %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="card-title">Next Steps</h6>
+          <p class="text-muted small mb-2">Resume headline</p>
+          <div data-controller="clipboard">
+            <blockquote class="blockquote-sm border-start border-2 ps-3 mb-2"
+                        data-clipboard-target="source">
+              <%= report.resume_headline %>
+            </blockquote>
+            <button class="btn btn-sm btn-outline-secondary"
+                    data-clipboard-target="button"
+                    data-action="click->clipboard#copy">Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# Outreach draft %>
+  <div class="card mb-4">
+    <div class="card-header">
+      <span class="fw-semibold">Networking outreach draft</span>
+    </div>
+    <div class="card-body">
+      <div data-controller="clipboard">
+        <pre class="mb-2 small" style="white-space: pre-wrap;"
+             data-clipboard-target="source"><%= report.outreach_draft %></pre>
+        <button class="btn btn-sm btn-outline-secondary"
+                data-clipboard-target="button"
+                data-action="click->clipboard#copy">Copy</button>
+      </div>
+      <p class="text-muted small mt-2 mb-0">
+        Review and personalize before sending. Generic outreach messages reduce response rates.
+      </p>
+    </div>
+  </div>
+
+  <%# Raw response collapse %>
+  <div class="mb-4">
+    <button class="btn btn-sm btn-outline-secondary"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#raw-response">
+      Show raw response
+    </button>
+    <div class="collapse mt-2" id="raw-response">
+      <pre class="bg-body-tertiary p-3 rounded small" style="white-space: pre-wrap;"><%= report.gemini_raw %></pre>
+    </div>
+  </div>
+
+<% else %>
+  <div class="alert alert-warning">
+    The advisor report is not available for this session.
+  </div>
+<% end %>

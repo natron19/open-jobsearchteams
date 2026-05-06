@@ -1,0 +1,39 @@
+<p class="text-muted mb-4">
+  Tell us about your search so the AI advisor can personalize every analysis.
+</p>
+
+<%= form_with model: @profile, url: profile_path, method: @profile.new_record? ? :post : :patch do |f| %>
+  <% if @profile.errors.any? %>
+    <div class="alert alert-danger">
+      <ul class="mb-0">
+        <% @profile.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :current_role, "Current role", class: "form-label" %>
+    <%= f.text_field :current_role, class: "form-control", placeholder: "e.g., Senior Marketing Manager" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :target_role, "Target role", class: "form-label" %>
+    <%= f.text_field :target_role, class: "form-control", placeholder: "e.g., Director of Product Marketing" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :top_skills, "Top skills", class: "form-label" %>
+    <%= f.text_area :top_skills, class: "form-control", rows: 3,
+        placeholder: "e.g., Python, product management, stakeholder communication" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :biggest_challenge, "Biggest challenge in your job search", class: "form-label" %>
+    <%= f.text_area :biggest_challenge, class: "form-control", rows: 3,
+        placeholder: "e.g., Most roles ask for experience I don't have yet" %>
+  </div>
+
+  <%= f.submit "Save my profile", class: "btn btn-primary" %>
+<% end %>
