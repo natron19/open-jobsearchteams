@@ -1,0 +1,19 @@
+# Per-app guardrail configuration, read by AiGuardConfig.
+# See docs/ai-guardrails.md (Layer 1b: AiOutputGuard) and docs/ai-evals.md.
+
+# Job search advice is not a personal-distress context; no crisis routing.
+crisis_terms: []
+
+# Output structure rules per AiTemplate name. Templates not listed get the
+# generic output checks only (non-empty, no prompt leak, no profanity, no new PII).
+#   format:        text | json
+#   required_keys: top-level keys the JSON object must contain
+templates:
+  health_ping:
+    format: text
+  # AdvisorSessionsController#create JSON.parses this. AdvisorReport validates
+  # fit_score and rationale; show.html.erb calls .each on strengths and gaps.
+  # resume_headline and outreach_draft are rendered nil-safely, so not required.
+  jobsearchteams_advisor_v1:
+    format: json
+    required_keys: [fit_score, rationale, strengths, gaps]
